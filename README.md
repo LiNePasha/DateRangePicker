@@ -1,5 +1,9 @@
 ## Technical:
 
+- Fetch not working in vercel because i add free plan key from exchangerate API and use HTTP not HTTPS, but work in local.
+
+## Technical:
+
 - React.js + TypeScript + CSS + Vite.
 
 ## How it works:
