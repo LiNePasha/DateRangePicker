@@ -1,6 +1,10 @@
 .date-range-picker {
-    display: flex;
-    align-items: center;
+  align-items: center;
+  }
+
+  .date-range-picker div {
+    flex-direction: column;
+    color: white;
   }
 
   .date-range-picker input {
@@ -17,6 +21,10 @@
     color: #fff;
     font-size: 20px;
     margin: 20px 0;
+}
+
+.date-range-picker, .date-range-picker div {
+  display: flex;
 }
 
   .loading-indicator, .error-message {
