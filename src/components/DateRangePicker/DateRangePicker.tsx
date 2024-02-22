@@ -62,18 +62,25 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({ onChange, dynamicRang
     <>
       <section className={`date-range-picker ${className}`} style={style}>
         {/* Input fields for start and end dates */}
-        <input
-          type="date"
-          value={startDate}
-          onChange={(e) => setStartDate(e.target.value)}
-          placeholder="Start Date"
-        />
-        <input
-          type="date"
-          value={endDate}
-          onChange={(e) => setEndDate(e.target.value)}
-          placeholder="End Date"
-        />
+        <div>
+          <span>Start Date :</span>
+          <input
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+            placeholder="Start Date"
+          />
+        </div>
+
+        <div>
+          <span>End Date :</span>
+          <input
+            type="date"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+            placeholder="End Date"
+          />
+        </div>
 
         {/* Button to fetch data */}
         <button 
@@ -91,7 +98,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({ onChange, dynamicRang
 
       {/* Named ranges */}
       <div className="named-ranges">
-        <h5>Named Ranges</h5>
+        <h5>Named Ranges :</h5>
           {dynamicRanges.map((days) => (
             <button 
               style={{ backgroundColor: buttonBgColor }}
