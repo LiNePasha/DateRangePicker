@@ -6,14 +6,13 @@ import './DateRangePicker.css';
 // props types interface
 interface DateRangePickerProps {
   onChange: (startDate: string, endDate: string) => void;
-  onClick?: () => void;
   dynamicRanges?: number[];
   className?: string;
   style?: React.CSSProperties;
   buttonBgColor?: string;
 }
 
-const DateRangePicker: React.FC<DateRangePickerProps> = ({ onChange, onClick, dynamicRanges = [], className = '', buttonBgColor = '#001684', style = {} }) => {
+const DateRangePicker: React.FC<DateRangePickerProps> = ({ onChange, dynamicRanges = [], className = '', buttonBgColor = '#001684', style = {} }) => {
 
   // State Hooks
   const [startDate, setStartDate] = useState<string>('');
