@@ -28,7 +28,7 @@ const App: React.FC = () => {
           dynamicRanges={dynamicRanges} // dynamic ranges
           className="custom-date-picker" // Add custom class name
           buttonBgColor='#001684' // Add custom button background color
-          style={{ display: 'flex', justifyContent: 'center' , border: '1px solid gray' }} // Add custom inline styles
+          style={{ display: 'flex', justifyContent: 'center' , alignItems: 'end' }} // Add custom inline styles
         />
       </main>
 
