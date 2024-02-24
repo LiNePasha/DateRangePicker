@@ -5,10 +5,10 @@ const App: React.FC = () => {
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
 
-  // Update the type of startDate and endDate to Date
-  const handleDateRangeChange = (startDate: Date, endDate: Date) => {
-    setStartDate(startDate);
-    setEndDate(endDate);
+  // Update the type of handleDateRangeChange
+  const handleDateRangeChange = (start: Date, end: Date) => {
+    setStartDate(start);
+    setEndDate(end);
   };
 
   // array of dynamic ranges
