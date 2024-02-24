@@ -20,7 +20,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({ dynamicRanges = [], c
   const [loading, setLoading] = useState(false);
   const [exchangeRates, setExchangeRates] = useState<{ [date: string]: { USDEGP: number; USDCAD: number } } | null>(null);
   const [error, setError] = useState<string | null>('');
-  const [showPicker, setShowPicker] = useState<boolean>(false);
+  const [showPicker, setShowPicker] = useState<boolean>(true);
 
   const handleStartDateChange = (value: Date | Date[]) => {
       const startDate = value as Date;
