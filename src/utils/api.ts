@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const ACCESS_KEY = '707fb2c201c85dc0f5163e609dc7033d'; // 'MY_ACCESS_KEY'
+const ACCESS_KEY = '7e07963e9557e0fd1730781a1fb91355'; // 'MY_ACCESS_KEY'
 const BASE_URL = 'http://api.exchangerate.host'; // HTTP URL
 
 export const fetchExchangeRates = async (startDate: string, endDate: string) => {
