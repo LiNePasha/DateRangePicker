@@ -74,6 +74,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({ dynamicRanges = [], c
 
   return (
     <div className={`date-range-picker ${className}`} style={style}>
+      <p className="error-message">Note: Fetch not working on public site because API using HTTP (Run Code Local to see Table Output)</p>
       <div className="date-range-input" onClick={togglePicker}>
         {startDate && endDate ? `${startDate.toDateString()} - ${endDate.toDateString()}` : 'StartDate to EndDate'}
       </div>
