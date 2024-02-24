@@ -50,6 +50,9 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({ dynamicRanges = [], c
         setExchangeRates(response?.quotes || null);
         setShowPicker(false); // Hide the calendar after fetching data
       }
+    } catch (error) {
+      console.error('Error fetching exchange rates:', error);
+      setError('API Plan HTTP Access Restricted, please Try Again ( you can open another browser ).');
     } finally {
       setLoading(false); // Set loading to false when data fetching is complete
     }
