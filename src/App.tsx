@@ -45,7 +45,7 @@ const App: React.FC = () => {
       </header>
 
       <main>
-        <h1>Click to open Exchange Rates</h1>
+        <h1>Click to open Date-Range-Picker</h1>
         <DateRangePicker 
           onChange={handleDateRangeChange}
           dynamicRanges={dynamicRanges} // dynamic ranges
