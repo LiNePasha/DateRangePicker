@@ -45,3 +45,8 @@ button {
   tr:hover {
     background-color: #ddd;
   }
+
+  main h1 {
+    text-align: center;
+    color: #ffffff;
+  }
