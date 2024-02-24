@@ -8,13 +8,10 @@ import './DateRangePicker.css';
 import NamedRanges from './NamedRanges';
 
 interface DateRangePickerProps {
-  onChange: (startDate: Date, endDate: Date) => void;
   dynamicRanges?: number[];
   className?: string;
   style?: React.CSSProperties;
   rangesButtonStyle?: React.CSSProperties;
-  startDate: Date | null;
-  endDate: Date | null;
 }
 
 const DateRangePicker: React.FC<DateRangePickerProps> = ({ dynamicRanges = [], className = '', rangesButtonStyle, style = {} }) => {
@@ -22,7 +19,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({ dynamicRanges = [], c
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [loading, setLoading] = useState(false);
   const [exchangeRates, setExchangeRates] = useState<{ [date: string]: { USDEGP: number; USDCAD: number } } | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>('');
   const [showPicker, setShowPicker] = useState<boolean>(false);
 
   const handleStartDateChange = (value: Date | Date[]) => {
@@ -41,7 +38,6 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({ dynamicRanges = [], c
     setStartDate(null);
     setEndDate(null);
     setExchangeRates(null);
-    setError(null);
   };
 
   const fetchData = async (startDate: string, endDate: string) => {
@@ -49,19 +45,16 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({ dynamicRanges = [], c
     try {
       const response = await fetchExchangeRates(startDate, endDate);
       if (response && response.error) {
-        setError('Soory somtimes not work try again not in my hand from API Plan.');
+        setError('API Plan HTTP Access Restricted, please Try Again ( you can open another browser ).');
       } else {
         setExchangeRates(response?.quotes || null);
         setShowPicker(false); // Hide the calendar after fetching data
       }
-    } catch (error) {
-      console.error('Error fetching exchange rates:', error);
-      setError('Error fetching exchange rates. Please try again.');
     } finally {
       setLoading(false); // Set loading to false when data fetching is complete
     }
   };
-  
+
   useEffect(() => {
     if (startDate && endDate) {
       console.log('Fetching dates:', startDate, endDate);
@@ -101,12 +94,13 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({ dynamicRanges = [], c
             />
           </div>
           <button onClick={clearSelection}>Clear</button>
-          {error && <p className="error-message">{error}</p>}
-          {loading && <div className="loading-indicator">Loading...</div>}
         </>
       )}
       </div>
-      
+
+      {loading && <div className="loading-indicator">Loading...</div>}
+      {error && <p className="error-message">{error}</p>}
+
       {exchangeRates && (
         <table>
           <thead>
