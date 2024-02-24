@@ -9,13 +9,13 @@
 ## How it works:
 
 - We Can Choose Start_Date & End_Date then fetch Data from exchangerate API.
-- After Click Fetch Data will display into a HTML Table of exchange rates for EGP and CAD currencies, One row per day of selected range.
+- After Choosing a Start&End Dates will display into a HTML Table of exchange rates for EGP and CAD currencies, One row per day of selected range.
 
   ## Date Range Picker Functionality:
 
 - Allows users to pick a starting date and an end date.
 - Provides validation to ensure that both start and end dates are provided.
-- Enforces the condition that the start date must be smaller than the end date.
+- Enforces the condition that the start date must be smaller than the end date - & reverse.
 - Handles fetching data from the API based on the selected date range.
 - Provides feedback to the user with error messages and a loading indicator during data fetching.
 
@@ -43,11 +43,10 @@
 ```react
 
         <DateRangePicker 
-          onChange={handleDateChange} // date change event
           dynamicRanges={dynamicRanges} // dynamic ranges
           className="custom-date-picker" // Add custom class name
-          buttonBgColor='#001684' // Add custom button background color
-          style={{ display: 'flex', justifyContent: 'center' , border: '1px solid gray' }} // Add custom inline styles
+          rangesButtonStyle={{ background: '#001684', color: '#fff' }} // Add custom button background color
+          style={{  }} // Add custom inline styles
         />
 ```
 
