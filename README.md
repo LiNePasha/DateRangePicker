@@ -4,7 +4,7 @@
 
 ## Technical:
 
-- React.js + TypeScript + CSS + Vite.
+- React.js + TypeScript + Axios + CSS + Vite.
 
 ## How it works:
 
@@ -43,10 +43,12 @@
 ```react
 
         <DateRangePicker 
+          onChange={handleDateRangeChange}
           dynamicRanges={dynamicRanges} // dynamic ranges
           className="custom-date-picker" // Add custom class name
           rangesButtonStyle={{ background: '#001684', color: '#fff' }} // Add custom button background color
           style={{  }} // Add custom inline styles
+          fetchData={fetchData} // Pass the fetchData function as prop
         />
 ```
 
