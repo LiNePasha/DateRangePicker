@@ -1,49 +1,59 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+// library for showing the Calendar only :D
+import Calendar, { CalendarProps } from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
 import { fetchExchangeRates } from '../../utils/api';
 import { formatDate } from '../../utils/dateUtils';
 import './DateRangePicker.css';
+import NamedRanges from './NamedRanges';
 
-// props types interface
 interface DateRangePickerProps {
-  onChange: (startDate: string, endDate: string) => void;
+  onChange: (startDate: Date, endDate: Date) => void;
   dynamicRanges?: number[];
   className?: string;
   style?: React.CSSProperties;
-  buttonBgColor?: string;
+  rangesButtonStyle?: React.CSSProperties;
+  startDate: Date | null;
+  endDate: Date | null;
 }
 
-const DateRangePicker: React.FC<DateRangePickerProps> = ({ onChange, dynamicRanges = [], className = '', buttonBgColor = '#001684', style = {} }) => {
-
-  // State Hooks
-  const [startDate, setStartDate] = useState<string>('');
-  const [endDate, setEndDate] = useState<string>('');
+const DateRangePicker: React.FC<DateRangePickerProps> = ({ dynamicRanges = [], className = '', rangesButtonStyle, style = {} }) => {
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
+  const [loading, setLoading] = useState(false);
   const [exchangeRates, setExchangeRates] = useState<{ [date: string]: { USDEGP: number; USDCAD: number } } | null>(null);
-  const [error, setError] = useState<string>('');
-  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const [showPicker, setShowPicker] = useState<boolean>(false);
 
-  const handleDateSelection = async () => {
-    setError(''); // Reset error state
-    setLoading(true); // Set loading to true while fetching data
-    
-    // Check if both start_date and end_date are provided
-    if (!startDate || !endDate) {
-      setError('Please provide both start and end dates.');
-      setLoading(false); // Set loading to false
-      return;
-    }
+  const handleStartDateChange = (value: Date | Date[]) => {
+      const startDate = value as Date;
+      startDate.setHours(new Date().getHours());
+      setStartDate(startDate);
+  };
+  
+  const handleEndDateChange = (value: Date | Date[]) => {
+      const endDate = value as Date;
+      endDate.setHours(new Date().getHours());
+      setEndDate(endDate);
+  };
 
-    // Check if start_date is smaller than end_date
-    if (startDate >= endDate) {
-      setError('Start date must be smaller than end date.');
-      setLoading(false); // Set loading to false
-      return;
-    }
+  const clearSelection = () => {
+    setStartDate(null);
+    setEndDate(null);
+    setExchangeRates(null);
+    setError(null);
+  };
 
+  const fetchData = async (startDate: string, endDate: string) => {
+    setLoading(true);
     try {
-      // Fetch exchange rates if validation passes
-      onChange(startDate, endDate);
       const response = await fetchExchangeRates(startDate, endDate);
-      setExchangeRates(response?.quotes || null);
+      if (response && response.error) {
+        setError('Soory somtimes not work try again not in my hand from API Plan.');
+      } else {
+        setExchangeRates(response?.quotes || null);
+        setShowPicker(false); // Hide the calendar after fetching data
+      }
     } catch (error) {
       console.error('Error fetching exchange rates:', error);
       setError('Error fetching exchange rates. Please try again.');
@@ -51,64 +61,52 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({ onChange, dynamicRang
       setLoading(false); // Set loading to false when data fetching is complete
     }
   };
+  
+  useEffect(() => {
+    if (startDate && endDate) {
+      console.log('Fetching dates:', startDate, endDate);
+      // Fetch data with selected dates
+      fetchData(formatDate(startDate), formatDate(endDate));
+      setShowPicker(false); // Hide the calendar after selecting from named ranges
+    }
+  }, [startDate, endDate]);
+  
 
-  const handleNamedRangeSelection = (start: string, end: string) => {
-    setError(''); // Reset error state
-    setStartDate(start);
-    setEndDate(end);
+  const togglePicker = () => {
+    setShowPicker(!showPicker); // Toggle the calendar visibility
   };
 
   return (
-    <>
-      <section className={`date-range-picker ${className}`} style={style}>
-        {/* Input fields for start and end dates */}
-        <div>
-          <span>Start Date :</span>
-          <input
-            type="date"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-            placeholder="Start Date"
-          />
-        </div>
-
-        <div>
-          <span>End Date :</span>
-          <input
-            type="date"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-            placeholder="End Date"
-          />
-        </div>
-
-        {/* Button to fetch data */}
-        <button 
-          style={{ backgroundColor: buttonBgColor }} 
-          onClick={handleDateSelection}>
-          Fetch Data
-        </button>
-      </section>
-
-      {/* Display error message */}
-      {error && <p className="error-message">{error}</p>}
-
-      {/* Display loading indicator */}
-      {loading && <div className="loading-indicator">Loading...</div>}
-
-      {/* Named ranges */}
-      <div className="named-ranges">
-        <h5>Named Ranges :</h5>
-          {dynamicRanges.map((days) => (
-            <button 
-              style={{ backgroundColor: buttonBgColor }}
-              key={days} onClick={() => handleNamedRangeSelection(getLastNDays(days), getCurrentDate())}>
-                Last {days} Days
-            </button>
-          ))}
-        </div>
-
-      {/* Table of exchange rates */}
+    <div className={`date-range-picker ${className}`} style={style}>
+      <div className="date-range-input" onClick={togglePicker}>
+        {startDate && endDate ? `${startDate.toDateString()} - ${endDate.toDateString()}` : 'StartDate to EndDate'}
+      </div>
+      <div className={`picker-wrapper ${showPicker ? 'show' : ''}`}>
+      {showPicker && (
+        <>
+        <NamedRanges
+          dynamicRanges={dynamicRanges}
+          onSelectRange={(start, end) => { setStartDate(start); setEndDate(end); }}
+          rangesButtonStyle={rangesButtonStyle} 
+        />
+          <div className="calendars">
+            <Calendar
+              value={startDate}
+              onChange={handleStartDateChange as CalendarProps['onChange']}
+            />
+            <Calendar
+              value={endDate}
+              onChange={handleEndDateChange as CalendarProps['onChange']}
+              minDate={startDate || undefined} // Set minDate only if startDate is defined
+            />
+          </div>
+          <button onClick={clearSelection}>Clear</button>
+          {error && <p className="error-message">{error}</p>}
+          {loading && <div className="loading-indicator">Loading...</div>}
+        </>
+      )}
+      </div>
+      
       {exchangeRates && (
         <table>
           <thead>
@@ -129,25 +127,8 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({ onChange, dynamicRang
           </tbody>
         </table>
       )}
-    </>
+    </div>
   );
-};
-
-// Helper function to get the current date in YYYY-MM-DD format
-const getCurrentDate = () => {
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, '0');
-  const day = String(now.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-};
-
-// Helper function to get the date of the last N days in YYYY-MM-DD format
-const getLastNDays = (n: number) => {
-  const today = new Date();
-  const targetDate = new Date(today);
-  targetDate.setDate(today.getDate() - n);
-  return formatDate(targetDate);
 };
 
 export default DateRangePicker;
