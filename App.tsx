@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
 import DateRangePicker from './components/DateRangePicker/DateRangePicker';
-import { useState } from 'react';
 
 const App: React.FC = () => {
   const [startDate, setStartDate] = useState<Date | null>(null);
@@ -9,7 +8,7 @@ const App: React.FC = () => {
   const handleDateRangeChange = (start: Date, end: Date) => {
     setStartDate(start);
     setEndDate(end);
-};
+  };
 
   // array of dynamic ranges
   const dynamicRanges = [7, 14, 30, 90];
@@ -35,10 +34,7 @@ const App: React.FC = () => {
           rangesButtonStyle={{ background: '#001684', color: '#fff' }} // Add custom button background color
           style={{  }} // Add custom inline styles
         />
-
       </main>
-
-
     </div>
   );
 };
