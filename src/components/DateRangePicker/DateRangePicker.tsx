@@ -118,8 +118,8 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({ dynamicRanges = [], c
             {Object.entries(exchangeRates).map(([date, rates]) => (
               <tr key={date}>
                 <td>{date}</td>
-                <td>{rates.USDEGP}</td>
-                <td>{rates.USDCAD}</td>
+                <td>{rates.USDEGP.toFixed(2)}</td>
+                <td>{rates.USDCAD.toFixed(2)}</td>
               </tr>
             ))}
           </tbody>
